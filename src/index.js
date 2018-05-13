@@ -11,8 +11,6 @@ class Substruct {
       baseURL: 'https://api.substruct.app/api/v1/space/'
     })
     this.axios.defaults.headers.common['Authorization'] = this.secret;
-    this.content = false
-    this.page = false
   }
 
   /**
@@ -34,20 +32,28 @@ class Substruct {
   /**
    * Function to collect page
    */
-  collectPage (id, callback) {
+  collectPage (id, callback, tags = false) {
     this.axios({
       method: 'get',
-      url: `page?id=${id}`
+      url: `page?id=${id}${tags && tags.length > 0 ? `&filter=${tags.join(',')}` : ''}`
     }).then((response) => {
       if (response.status === 200) {
-        if (response.data.content) {
-          this.content = response.data.content
-        }
+        return callback(null, response.data)
+      } else {
+        return callback(response.data, null)
+      }
+    })
+  }
 
-        if (response.data.page) {
-          this.page = response.data.page
-        }
-
+  /**
+   * Function to collect content
+   */
+  collectContent (id, type, callback, tags = false) {
+    this.axios({
+      method: 'get',
+      url: `page/content?id=${id}&type=${type}${tags && tags.length > 0 ? `&filter=${tags.join(',')}` : ''}`
+    }).then((response) => {
+      if (response.status === 200) {
         return callback(null, response.data)
       } else {
         return callback(response.data, null)

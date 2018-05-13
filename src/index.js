@@ -11,6 +11,8 @@ class Substruct {
       baseURL: 'https://api.substruct.app/api/v1/space/'
     })
     this.axios.defaults.headers.common['Authorization'] = this.secret;
+    this.content = false
+    this.page = false
   }
 
   /**
@@ -30,6 +32,20 @@ class Substruct {
   }
 
   /**
+   * Get content by identifier
+   * @param {string} identififer
+   * @param {array} content optional
+   */
+  getContentByIdentifier (identififer, content = false) {
+    if (!this.content && !content) {
+      throw Error('You need to provide some content to search through')
+    }
+    let searchArray = content ? content : this.content
+    const filteredContent = searchArray.filter(c => c.identifier === 'identifier')
+    return filteredContent[0]
+  }
+
+  /**
    * Function to collect page
    */
   collectPage (id, callback) {
@@ -38,6 +54,14 @@ class Substruct {
       url: `page?id=${id}`
     }).then((response) => {
       if (response.status === 200) {
+        if (response.data.content) {
+          this.content = response.data.content
+        }
+
+        if (response.data.page) {
+          this.page = response.data.page
+        }
+
         return callback(null, response.data)
       } else {
         return callback(response.data, null)

@@ -1,6 +1,6 @@
 {
   "name": "substruct-js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Javascript library to help communicate with Substruct.",
   "main": "lib/substruct.min.js",
   "scripts": {

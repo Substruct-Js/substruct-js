@@ -32,20 +32,6 @@ class Substruct {
   }
 
   /**
-   * Get content by identifier
-   * @param {string} identififer
-   * @param {array} content optional
-   */
-  getContentByIdentifier (identififer, content = false) {
-    if (!this.content && !content) {
-      throw Error('You need to provide some content to search through')
-    }
-    let searchArray = content ? content : this.content
-    const filteredContent = searchArray.filter(c => c.identifier === 'identifier')
-    return filteredContent[0]
-  }
-
-  /**
    * Function to collect page
    */
   collectPage (id, callback) {

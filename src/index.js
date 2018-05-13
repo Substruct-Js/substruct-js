@@ -46,12 +46,28 @@ class Substruct {
   }
 
   /**
-   * Function to collect content
+   * Function to collect page content
    */
-  collectContent (id, type, callback, tags = false) {
+  collectPageContent (id, type, callback, tags = false) {
     this.axios({
       method: 'get',
       url: `page/content?id=${id}&type=${type}${tags && tags.length > 0 ? `&filter=${tags.join(',')}` : ''}`
+    }).then((response) => {
+      if (response.status === 200) {
+        return callback(null, response.data)
+      } else {
+        return callback(response.data, null)
+      }
+    })
+  }
+
+  /**
+   * Function to collect content
+   */
+  collectContent (type, callback, tags = false) {
+    this.axios({
+      method: 'get',
+      url: `content?type=${type}${tags && tags.length > 0 ? `&filter=${tags.join(',')}` : ''}`
     }).then((response) => {
       if (response.status === 200) {
         return callback(null, response.data)
